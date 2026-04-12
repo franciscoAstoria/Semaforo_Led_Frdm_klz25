@@ -11,26 +11,43 @@
 static const struct gpio_dt_spec led_red   = GPIO_DT_SPEC_GET(LED_RED_NODE, gpios);
 static const struct gpio_dt_spec led_green = GPIO_DT_SPEC_GET(LED_GREEN_NODE, gpios);
 
+typedef enum {
+    RED,
+    YEL,
+    GRE
+} EstadoSemaforo;
+
+
 int main(void)
 {
 
     gpio_pin_configure_dt(&led_red,   GPIO_OUTPUT_ACTIVE);
     gpio_pin_configure_dt(&led_green, GPIO_OUTPUT_ACTIVE);
+    EstadoSemaforo estadoAtual = GRE;
 
-    while (1) {
+    while (1) {        
+        switch (estadoAtual) {
+            case GRE:
+                gpio_pin_set_dt(&led_red,   0);
+                gpio_pin_set_dt(&led_green, 1);
+                k_msleep(SLEEP_TIME_MS_GRE);
+                estadoAtual = YEL;
+                break;
+            
+            case YEL:
+                gpio_pin_set_dt(&led_red,   1);
+                gpio_pin_set_dt(&led_green, 1);
+                k_msleep(SLEEP_TIME_MS_YEL);
+                estadoAtual = RED;
+                break;
 
-        gpio_pin_set_dt(&led_red,   0);
-        gpio_pin_set_dt(&led_green, 1);
-        k_msleep(SLEEP_TIME_MS_GRE);
-
-        gpio_pin_set_dt(&led_red,   1);
-        gpio_pin_set_dt(&led_green, 1);
-        k_msleep(SLEEP_TIME_MS_YEL);
-
-        gpio_pin_set_dt(&led_red,   1);
-        gpio_pin_set_dt(&led_green, 0);
-        k_msleep(SLEEP_TIME_MS_RED);
-        
+            case RED:
+                gpio_pin_set_dt(&led_red,   1);
+                gpio_pin_set_dt(&led_green, 0);
+                k_msleep(SLEEP_TIME_MS_RED);
+                estadoAtual = GRE;
+                break;
+        }
     }
 
     return 0;
