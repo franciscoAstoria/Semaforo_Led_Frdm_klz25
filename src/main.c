@@ -2,8 +2,8 @@
 #include <zephyr/device.h>
 #include <zephyr/drivers/gpio.h>
 
-#define LED_RED_NODE   DT_ALIAS(led0)   // PTB18 - vermelho
-#define LED_GREEN_NODE DT_ALIAS(led2)   // PTB19 - verde
+#define LED_RED_NODE   DT_ALIAS(led2)   // PTB18 - vermelho
+#define LED_GREEN_NODE DT_ALIAS(led0)   // PTB19 - verde
 #define SLEEP_TIME_MS_RED  5000
 #define SLEEP_TIME_MS_YEL  1000
 #define SLEEP_TIME_MS_GRE  3000
